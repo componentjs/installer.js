@@ -56,6 +56,21 @@ describe('Installer', function () {
         done();
       });
     });
+
+    it('should support missing dependencies', function (done) {
+      fs.writeFileSync('component.json', JSON.stringify({
+        development: {
+          "component/assert": "*",
+          "component/each": "*"
+        }
+      }));
+
+      var installer = new Installer('.');
+      installer.install(function (err) {
+        if (err) return done(err);
+        done();
+      });
+    });
   });
 
   describe('#development', function () {
