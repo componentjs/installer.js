@@ -100,8 +100,7 @@ describe('Installer', function () {
     it('should cache the config', function () {
       var installer = new Installer('.');
       var conf = installer.json();
-      fs.unlinkSync('component.json');
-      assert.deepEqual(conf, installer.json());
+      assert(conf === installer.json());
     });
   });
 });
