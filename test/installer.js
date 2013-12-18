@@ -89,4 +89,18 @@ describe('Installer', function () {
       });
     });
   });
+
+  describe('#json', function () {
+    it('should return the config', function () {
+      var installer = new Installer('.');
+      var conf = installer.json();
+      assert('*' == conf.development['component/assert']);
+    });
+
+    it('should cache the config', function () {
+      var installer = new Installer('.');
+      var conf = installer.json();
+      assert(conf === installer.json());
+    });
+  });
 });
