@@ -1,4 +1,9 @@
 
+0.0.5 / 2014-01-16
+==================
+
+ * remove cyclic dep with component and fix casing of lookup
+
 0.0.4 / 2014-01-16
 ==================
 

@@ -1,7 +1,7 @@
 {
   "name": "component-installer",
   "repository": "https://github.com/component/installer.js.git",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "description": "Component install tool",
   "keywords": [
