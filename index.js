@@ -93,7 +93,7 @@ Installer.prototype.install = function(name, version){
         if (err) return pkg.error(err);
         pkg.config = conf;
 
-        var files = pkg.files(conf).concat('component.json');
+        var files = pkg.files(conf);
         var batch = new Batch;
         batch.concurrency(6);
 
@@ -133,11 +133,12 @@ Installer.prototype.install = function(name, version){
  * @api private
  */
 
-function Package(installer, name, version) {
+function Package(installer, name, version, configName) {
   this.remote = installer.remote;
   this.installer = installer;
   this.version = version;
   this.name = name;
+  this.configName = configName || 'component.json';
 }
 
 /**
@@ -162,6 +163,8 @@ Package.prototype.files = function(conf){
     if (!files) return;
     ret = ret.concat(files);
   });
+
+  ret.push(this.configName);
 
   return ret;
 };
@@ -227,7 +230,7 @@ Package.prototype.stream = function(file, ref){
  */
 
 Package.prototype.json = function(ref, fn){
-  this.contents('component.json', ref, function(err, file){
+  this.contents(this.configName, ref, function(err, file){
     if (err) return fn(err);
     var json = decode(file.content);
     fn(null, JSON.parse(json));
