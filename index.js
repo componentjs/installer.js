@@ -4,9 +4,7 @@
  */
 
 var Emitter = require('events').EventEmitter;
-var lookup = require('gh-lookup');
 var fmt = require('util').format;
-var assert = require('assert');
 var mkdir = require('mkdirp');
 var Batch = require('batch');
 var Github = require('gh2');
