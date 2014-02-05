@@ -1,17 +1,19 @@
 {
   "name": "component-installer",
-  "repository": "https://github.com/component/installer.js.git",
+  "repository": "component/installer.js",
   "version": "0.0.5",
   "license": "MIT",
-  "description": "Component install tool",
+  "description": "Component installer",
   "keywords": [
     "component",
-    "install"
+    "install",
+    "package"
   ],
   "dependencies": {
-    "debug": "~0.7.4",
-    "component-package": "0.0.3",
-    "batch": "~0.5.0"
+    "debug": "*",
+    "batch": "^0.5.0",
+    "mkdirp": "^0.3.5",
+    "gh2": "0.0.1"
   },
   "devDependencies": {
     "mocha": "*",

@@ -1,7 +1,12 @@
 
 # installer.js
 
-  Component install tool. This is the library that `component(1)` uses to install components.
+  Component installer, used by component(1) to fetch components.
+
+  This library does _not_ handle recursive installation or caching,
+  this logic is deferred to a higher level. Authentication etc is
+  handled via the `.remote` implementation shown in the API docs
+  below (and need a non-GH specific API ;)).
 
 ## Installation
 
@@ -11,55 +16,68 @@
 
 ```js
 var Installer = require('component-installer');
-var installer = new Installer(__dirname);
+var installer = new Installer;
 
-installer.on('package', function (pkg) {
-  console.log('installing', pkg.name, pkg.version);
-});
+function report(pkg) {
+ console.log('  %s : downloading', pkg.name);
 
-installer.install(function (err) {
-  console.log('installed');
-});
+  pkg.on('resolve', function(release){
+    console.log('  %s : resolve %s -> %s', pkg.name, pkg.version, release.name);
+  });
+
+  pkg.on('file', function(file){
+    console.log('  %s : GET %s', pkg.name, file);
+  });
+
+  pkg.on('error', function(err){
+    console.log('  %s : error %s', pkg.name, err.message);
+  });
+
+  pkg.on('end', function(){
+    if (pkg.config.dependencies) {
+      var n = Object.keys(pkg.config.dependencies).length;
+      console.log('  %s : installing %d dependencies', pkg.name, n);
+      Object.keys(pkg.config.dependencies).forEach(function(dep){
+        var ver = pkg.config.dependencies[dep];
+        dep = installer.install(dep, ver);
+        report(dep);
+      });
+    }
+
+    console.log('  %s : installed', pkg.name);
+  });
+}
+
+var tip = installer.install('component/events', '1.x');
+
+report(tip);
 ```
 
 ## API
 
-### new Installer(dir)
+## Installer()
 
-  Creates a new `Installer` for the given component `dir`.
+Initialize component client with `opts`.
 
-### Installer#install(callback)
+- `remote` object acting as the remote [Github]
+- `dir` directory [./components]
 
-  Install the component's dependencies and `callback(err)`.
+Remotes must provide the following methods:
 
-### Installer#installPackage(name, version)
+- `.lookup(name, version, fn)`
+- `.contents(name, ref, file, fn)`
+- `.stream(name, ref, file) -> Stream`
 
-  Install a dependency by `name` and `version`.
+## Installer.install(name, version)
 
-### Installer#use(plugin)
+  Install package `name` with semver `version`. The
+  following events are available:
 
-  Use the given `plugin`.
+ - `resolve` (release) version resolved
+ - `file` (filename) fetching a file
+ - `error` (error) an error occurred
+ - `end` install complete
 
-### Installer#development()
+## License
 
-  Install development dependencies.
-
-### Installer#concurrency(number)
-
-  Set the `number` of packages to install concurrently.
-
-### Installer#force()
-
-  Force installation even if the component already exists.
-
-### Installer#destination(dir)
-
-  Set the install destination `dir`.
-
-### Installer#remote(url)
-
-  Add a remote to the installer by `url`.
-
-### Installer#proxy(url)
-
-  Set the installer's proxy `url`.
+ MIT
