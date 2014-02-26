@@ -1,4 +1,9 @@
 
+0.0.7 / 2014-02-26
+==================
+
+ * unpinned component-package - please pin in component or in your own app instead
+
 0.0.5 / 2014-01-16
 ==================
 
