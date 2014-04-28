@@ -1,4 +1,10 @@
 
+0.0.8 / 2014-04-28 
+==================
+
+ * Fix component remote raw.github.com -> raw.githubusercontent.com
+ * Add environment variable COMPONENT_REMOTE
+
 0.0.7 / 2014-02-26
 ==================
 
